@@ -379,6 +379,11 @@ footer.band { padding: 22px 16px; }
 /* reviews: olive band, all cards light pink */
 .rev.r1 .stars { color: #E8A317; }
 #reviews.band .sec-head p { color: #fff; }
+
+/* round 5: shelf life note, tighter yogurt cards */
+.item p.shelf { flex: none; background: var(--lime); color: #2E3B2D; font-size: 14px; font-weight: 600; line-height: 1.4; padding: 10px 12px; border-radius: 12px; }
+.item p.shelf b { font-weight: 800; }
+@media (min-width: 1000px) { #menuView .item.yog { height: auto; align-self: start; } }
 </style>
 </head>
 <body>
@@ -646,8 +651,9 @@ function renderMenu() {
       var btns = ["r", "l"].filter(function (k) { return m[k]; }).map(function (k) {
         return '<button type="button" class="size" data-size="' + k + '" data-id="' + m.id + '" aria-pressed="' + (sz === k || !m.l) + '"><span>' + sizeLabel(m, k) + '</span><strong>' + naira(m[k]) + '</strong></button>';
       }).join("");
-      return '<article class="item"><div class="art photo' + (m.group === "Parfaits" ? " sq" : " wide") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "l" ? "350" : "250") : (m.id === "yogurt-sweet" ? "yog-sweet" : "yog-plain")) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
+      return '<article class="item' + (m.group === "Greek yogurt" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " sq" : " wide") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "l" ? "350" : "250") : (m.id === "yogurt-sweet" ? "yog-sweet" : "yog-plain")) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
         '<div class="body"><span class="pill">' + esc(m.tag) + '</span><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p>' +
+        '<p class="shelf"><b>No artificial preservatives added.</b> Shelf life is 5 days to 1 week. Keep chilled.</p>' +
         '<div class="sizes" role="group" aria-label="Size for ' + esc(m.name) + '">' + btns + '</div>' +
         '<button type="button" class="btn" data-add="' + m.id + '">Add to cart</button></div></article>';
     }).join("") + '</div>';
@@ -845,14 +851,14 @@ $("#joinForm").addEventListener("submit", function (e) {
     } catch (e) { end(); }
   }
   hb.addEventListener("click", function () {
-    if (talking) { try { speechSynthesis.cancel(); } catch (e) {} return; }
     if (!hv.muted) { hv.muted = true; hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); return; }
     var rv = $("#reelVid"), rb = $("#reelSound");
     if (rv && !rv.muted) { rv.muted = true; if (rb) { rb.textContent = "Tap for music"; rb.setAttribute("aria-pressed", "false"); } }
+    try { hv.currentTime = 0; } catch (e) {}
+    hv.volume = 0.9; hv.muted = false;
     var p = hv.play(); if (p && p.catch) p.catch(function () {});
-    hb.textContent = "Welcome..."; hb.setAttribute("aria-pressed", "true");
+    hb.textContent = "Mute"; hb.setAttribute("aria-pressed", "true");
     try { track("hero_sound_on"); } catch (e) {}
-    say("Welcome to Clarke's Goodness.", function () { hv.volume = 0.8; hv.muted = false; hb.textContent = "Mute"; });
   });
 })();
 (function () {
