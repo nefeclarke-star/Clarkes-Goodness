@@ -825,7 +825,7 @@ $("#joinForm").addEventListener("submit", function (e) {
     var hv = $("#heroVid"), hb = $("#heroSound");
     if (hv && !hv.muted) { hv.muted = true; if (hb) { hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); } }
     var p = v.play(); if (p && p.catch) p.catch(function () {});
-    v.volume = 0.5; v.muted = false; b.textContent = "Mute"; b.setAttribute("aria-pressed", "true");
+    v.volume = 0.8; v.muted = false; b.textContent = "Mute"; b.setAttribute("aria-pressed", "true");
   });
 })();
 (function () {
@@ -846,12 +846,13 @@ $("#joinForm").addEventListener("submit", function (e) {
   }
   hb.addEventListener("click", function () {
     if (talking) { try { speechSynthesis.cancel(); } catch (e) {} return; }
+    if (!hv.muted) { hv.muted = true; hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); return; }
     var rv = $("#reelVid"), rb = $("#reelSound");
     if (rv && !rv.muted) { rv.muted = true; if (rb) { rb.textContent = "Tap for music"; rb.setAttribute("aria-pressed", "false"); } }
-    hv.muted = true;
+    var p = hv.play(); if (p && p.catch) p.catch(function () {});
     hb.textContent = "Welcome..."; hb.setAttribute("aria-pressed", "true");
     try { track("hero_sound_on"); } catch (e) {}
-    say("Welcome to Clarke's Goodness.", function () { hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); });
+    say("Welcome to Clarke's Goodness.", function () { hv.volume = 0.8; hv.muted = false; hb.textContent = "Mute"; });
   });
 })();
 (function () {
