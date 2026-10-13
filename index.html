@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Manrope:wght@400;500;600;700;800&display=swap">
+<script>document.documentElement.setAttribute("data-theme","light");</script>
 <style>
 /* Layout: layered-stripe identity (a parfait seen from the side), sticky header with cart, hero + live cup, menu grid, slide-in checkout panel. */
 :root {
@@ -315,7 +316,7 @@ footer.band { padding: 22px 16px; }
 .sold b { font-family: var(--font-display); font-weight: 400; font-size: 28px; color: var(--blue); min-width: 2.6ch; text-align: center; background: #fff; border-radius: 999px; padding: 2px 12px; }
 .sold[hidden] { display: none; }
 .reelwrap { display: grid; place-items: center; }
-.reelframe { position: relative; width: min(100%, 340px); aspect-ratio: 9 / 16; border-radius: 28px; overflow: hidden; background: #000; box-shadow: 0 14px 40px rgba(20,35,26,.25); }
+.reelframe { position: relative; width: min(100%, 420px); aspect-ratio: 4 / 5; border-radius: 28px; overflow: hidden; background: #000; box-shadow: 0 14px 40px rgba(20,35,26,.25); }
 .reelv { width: 100%; height: 100%; object-fit: cover; display: block; }
 .reelbtn { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); border: 0; border-radius: 999px; padding: 10px 18px; font: inherit; font-weight: 800; background: rgba(255,255,255,.92); color: var(--ink); min-height: 44px; cursor: pointer; }
 .story { max-width: 720px; margin-inline: auto; text-align: center; }
@@ -327,11 +328,62 @@ footer.band { padding: 22px 16px; }
 .gcbox { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: var(--band-green); color: #fff; border-radius: 28px; padding: 26px 30px; }
 .gcbox h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 4vw, 36px); line-height: 1.15; }
 .gcbox .btn { background: #fff; color: var(--band-green); border-color: #fff; }
+
+/* readability pass: always light, darker bolder text */
+:root { --muted: #3F4C3E; }
+.band .step { background: #fff; }
+.band .step, .band .step h3 { color: #14231A; }
+.band .step p { color: #1B2A1F; font-weight: 600; }
+.band.olive .sec-head p, .band.red .sec-head p { color: #fff; font-weight: 600; }
+.band.olive .sec-head h2, .band.red .sec-head h2 { color: #fff; }
+.story p, .dnote, .allergy p + p { color: #2E3B2D; }
+.rev footer span { opacity: 1; }
+.rev.r4 { background: var(--pink); color: var(--ink); }
+.rev.r5 { background: var(--band-red); color: #fff; }
+.rev.r4 .stars { color: #E8A317; }
+.rev.r5 .stars { color: #FFD166; }
+.gcbox h2 { color: #fff; }
+.rev footer, .rev footer span, .rev footer strong { color: inherit; opacity: 1; }
+.rev.r2 footer, .rev.r3 footer, .rev.r5 footer { color: #fff; border-top-color: rgba(255,255,255,.6); }
+.rev.r1 footer, .rev.r4 footer { color: #14231A; border-top-color: rgba(20,35,26,.45); }
+
+/* round 3 */
+.inglist { font-size: 17px; font-weight: 600; color: #14231A; margin: 0 0 18px; max-width: 70ch; }
+.custom-note { margin-top: 14px; border-left-color: var(--band-olive); }
+.custom-note p + p { color: #2E3B2D; }
+.reviews { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.rev { padding: 18px; border-radius: 20px; }
+.rev h3 { font-size: 19px; }
+.rev p { font-size: 15px; }
+.rev .stars { font-size: 17px; }
+@media (max-width: 1000px) { .reviews { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .reviews { grid-template-columns: 1fr; } }
+
+/* round 4: less empty space on desktop */
+@media (min-width: 1000px) {
+  #menuView { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; align-items: start; }
+  #menuView .grid { display: contents; }
+  #menuView .grp { grid-column: span 2; order: 1; margin: 0; }
+  #menuView .item { order: 2; height: 100%; }
+}
+.watchgrid { display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; justify-items: center; }
+.watchtext h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.12; margin-bottom: 12px; }
+.watchtext p { font-size: 18px; font-weight: 600; color: #2E3B2D; margin-bottom: 20px; max-width: 44ch; }
+@media (min-width: 820px) {
+  .watchgrid { grid-template-columns: 340px minmax(0, 440px); justify-content: center; gap: 56px; justify-items: stretch; }
+}
+.ingcols { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media (min-width: 900px) { .ingcols { grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; } .ingcols .allergy { max-width: none; } }
+.ingcols .allergy + .allergy { margin-top: 14px; }
+
+/* reviews: olive band, all cards light pink */
+.rev.r1 .stars { color: #E8A317; }
+#reviews.band .sec-head p { color: #fff; }
 </style>
 </head>
 <body>
 
-<div class="sample" id="sampleBar">Free delivery on the Island from ₦20,000 and on the Mainland from ₦25,000.</div>
+<div class="sample" id="sampleBar">Free delivery on all orders of ₦25,000 and above on the Island, and ₦35,000 and above on the Mainland.</div>
 <div class="topbar">
   <header class="top wrap">
     <a class="brand" href="#top" aria-label="Clarke's Goodness, home"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path class="ms" d="M30 16C27 9 31 4 36 6" fill="none" stroke-width="3" stroke-linecap="round"/><path class="ml" d="M37 19C40 7 52 4 60 6C60 17 50 23 39 21Z"/><g class="mb"><circle cx="32" cy="27" r="8"/><circle cx="20" cy="33" r="8"/><circle cx="44" cy="33" r="8"/><circle cx="26" cy="44" r="8"/><circle cx="38" cy="45" r="8"/><circle cx="31" cy="55" r="7"/></g><g class="mh"><circle cx="29.5" cy="24.5" r="2"/><circle cx="17.5" cy="30.5" r="2"/><circle cx="41.5" cy="30.5" r="2"/><circle cx="23.5" cy="41.5" r="2"/><circle cx="35.5" cy="42.5" r="2"/></g></svg><span class="wm"><span class="w1">Clarke's</span><span class="w2"><b>G</b>oodness</span></span></a>
@@ -351,12 +403,12 @@ footer.band { padding: 22px 16px; }
         <a class="btn" href="#menu">Start shopping</a>
         <a class="btn ghost" href="#how">How it works</a>
       </div>
-      <div class="sold" id="soldBox" hidden><b id="soldNum">0</b><span>cups sold since we opened. Thank you!</span></div>
+      <div class="sold" id="soldBox" hidden><b id="soldNum">0</b><span>cups sold since we opened in September 2026. Thank you!</span></div>
       <div class="facts"><span>Order 24 hours ahead</span><span>Pickup in Lekki</span><span>Pay by bank transfer</span><span>Functions and bulk orders</span></div>
     </div>
     <div class="stage">
       <div class="cup" aria-hidden="true"></div>
-      <div class="vframe"><video id="heroVid" class="hv" autoplay muted loop playsinline preload="metadata" poster="cup-poster.jpg" aria-label="Fresh fruit parfaits being prepared"><source src="cup-loop.mp4" type="video/mp4"></video></div>
+      <div class="vframe"><video id="heroVid" class="hv" autoplay muted loop playsinline preload="metadata" poster="hero-poster.jpg" aria-label="Fresh fruit parfaits being prepared"><source src="hero-loop.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="heroSound" aria-pressed="false">Tap for sound</button></div>
       <div class="welcome" aria-hidden="true"><span>Welcome to</span><b>Clarke's Goodness</b></div><span class="tag t1">Chilled</span><span class="tag t2">Fresh fruit</span><span class="tag t3">Made to order</span>
     </div>
   </div>
@@ -382,7 +434,7 @@ footer.band { padding: 22px 16px; }
 
   <section id="watch" aria-labelledby="watchh">
     <div class="sec-head"><h2 id="watchh">See the goodness</h2><p>A quick look at what goes into every cup.</p></div>
-    <div class="reelwrap"><div class="reelframe"><video id="reelVid" class="reelv" muted loop playsinline preload="metadata" poster="reel-poster.jpg" aria-label="Clarke's Goodness reel"><source src="reel.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="reelSound" aria-pressed="false">Tap for sound</button></div></div>
+    <div class="watchgrid"><div class="reelwrap"><div class="reelframe"><video id="reelVid" class="reelv" muted loop playsinline preload="metadata" poster="cup-poster.jpg" aria-label="Our parfait cups, freshly made"><source src="cup-loop.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="reelSound" aria-pressed="false">Tap for music</button></div></div><div class="watchtext"><h3>Fresh, measured and filling.</h3><p>Fresh fruit, crunchy granola and nuts, layered over creamy Greek yogurt. Every ingredient is measured, and every cup is made to order.</p><a class="btn" href="#menu">Start shopping</a></div></div>
   </section>
 
   <section id="how" class="band pink" aria-labelledby="howh">
@@ -411,21 +463,24 @@ footer.band { padding: 22px 16px; }
 
   <section id="ingredients" class="band soft" aria-labelledby="ingh">
     <div class="sec-head"><h2 id="ingh">What is in our cups</h2><p>Real ingredients, listed so you can choose with confidence.</p></div>
-    <h3 class="ingh3">Fruits</h3>
-    <ul class="chips" aria-label="Fruits we use now"><li>Green apples</li><li>Red apples</li><li>Kiwi</li><li>Grapes</li><li>Strawberries</li><li>Raspberries</li><li>Plums</li><li>Bananas</li></ul>
+    <div class="ingcols"><div><h3 class="ingh3">Fruits</h3>
+    <p class="inglist">Green apples, red apples, kiwi, grapes, strawberries, raspberries, plums and bananas.</p>
     <h3 class="ingh3">Also in our cups</h3>
-    <ul class="chips" aria-label="Other ingredients"><li>Greek yogurt</li><li>Crunchy granola</li><li>Almond nuts</li><li>Cashew nuts</li><li>Coconut</li><li>Coconut shavings</li></ul>
-    <div class="allergy" role="note"><p><strong>Allergy information.</strong> Our parfaits contain milk (Greek yogurt), almond nuts, cashew nuts and coconut. Our granola may contain gluten.</p><p>Fruits may change with the season. If you have an allergy, tell us in the notes when you order.</p></div>
+    <p class="inglist">Greek yogurt, crunchy granola, almond nuts, cashew nuts, coconut and coconut shavings.</p></div><div><div class="allergy" role="note"><p><strong>Allergy information.</strong> Our parfaits contain milk (Greek yogurt), almond nuts, cashew nuts and coconut. Our granola may contain gluten.</p><p>Fruits may change with the season. Orders under 20 cups are made to our standard recipe.</p></div>
+    <div class="allergy custom-note" role="note"><p><strong>Custom orders.</strong> Want your cups made a certain way? Custom orders need a minimum of 20 cups and must be requested at least 24 hours before pickup or delivery.</p><p>If anyone has an allergy to a fruit or a nut, tell us exactly what they are allergic to when you place the order, so we can leave it out. Allergy and custom changes are only available on orders of 20 cups or more.</p></div></div></div>
   </section>
 
-  <section id="reviews" aria-labelledby="revh">
+  <section id="reviews" class="band olive" aria-labelledby="revh">
     <div class="sec-head"><h2 id="revh">Customer reviews</h2><p>Real people. Sweeter days.</p></div>
     <div class="reviews">
       <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;So fresh and delicious!&rdquo;</h3><p>The yogurt is so creamy and the fruits are always fresh. You can really taste the quality. It&rsquo;s now my go-to healthy treat. Highly recommend!</p><footer><b>Amaka E.</b><span>September 28, 2026</span></footer></article>
-      <article class="rev r2"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;Healthy, filling and tasty!&rdquo;</h3><p>I love how satisfying and fresh it is. Perfect balance of yogurt, fruits and granola. Always consistent and well packaged. Thank you!</p><footer><b>Tobi</b><span>October 3, 2026</span></footer></article>
-      <article class="rev r3"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;My customers love it!&rdquo;</h3><p>Since I started stocking it in my store, all 20 cups finish in less than three days! My customers keep coming back for more. I may need to increase my inventory because the demand is real.</p><footer><b>Von</b><span>September 18, 2026</span></footer></article>
-      <article class="rev r4"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;One cup is not even enough!&rdquo;</h3><p>This is very yummy and puffy. The more I eat, the more I want. Please keep up the quality.</p><footer><b>Precious</b><span>September 10, 2026</span></footer></article>
-      <article class="rev r5"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;A whole meal!&rdquo;</h3><p>Really filling. Next time, make sure you fill the cup to the brim. For a gym girl like me, this is a whole meal.</p><footer><b>Kenny</b></footer></article>
+      <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;Healthy, filling and tasty!&rdquo;</h3><p>I love how satisfying and fresh it is. Perfect balance of yogurt, fruits and granola. Always consistent and well packaged. Thank you!</p><footer><b>Tobi</b><span>October 3, 2026</span></footer></article>
+      <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;My customers love it!&rdquo;</h3><p>Since I started stocking it in my store, all 20 cups finish in less than three days! My customers keep coming back for more. I may need to increase my inventory because the demand is real.</p><footer><b>Von</b><span>September 18, 2026</span></footer></article>
+      <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;One cup is not even enough!&rdquo;</h3><p>This is very yummy and puffy. The more I eat, the more I want. Please keep up the quality.</p><footer><b>Precious</b><span>September 10, 2026</span></footer></article>
+      <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;A whole meal!&rdquo;</h3><p>Really filling. Next time, make sure you fill the cup to the brim. For a gym girl like me, this is a whole meal.</p><footer><b>Kenny</b><span>September 15, 2026</span></footer></article>
+      <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;Rich, and so affordable!&rdquo;</h3><p>Your parfait is very affordable for the rich content in it. What I love most is the way you pack the granola separately. It keeps the granola really crunchy, and I enjoy it so much.</p><footer><b>Tochukwu</b><span>October 10, 2026</span></footer></article>
+      <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;We need two more cups!&rdquo;</h3><p>The parfait is so great! My colleague and I need two more cups. Please can you get them to us as soon as possible? We enjoyed it so much.</p><footer><b>Gladys</b><span>October 10, 2026</span></footer></article>
+      <article class="rev r1"><div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h3>&ldquo;Customers keep asking for it!&rdquo;</h3><p>People at the store are desperately rushing for your parfait. Some even paid upfront, even though it had sold out. Please get us more stock as soon as possible.</p><footer><b>Ayo</b><span>October 8, 2026</span></footer></article>
     </div>
   </section>
 
@@ -456,7 +511,7 @@ footer.band { padding: 22px 16px; }
     <p class="jnote" id="joinNote">We will never share your email.</p>
   </section>
 
-  <footer class="band green"><span>&copy; <span id="yr"></span> Clarke's Goodness</span><span>Made fresh in Lagos</span></footer>
+  <footer class="band green"><span>&copy; <span id="yr"></span> Clarke's Goodness</span><span>Made fresh in Lagos &middot; Since September 2026</span></footer>
 </main>
 
 <div id="layer" hidden>
@@ -475,14 +530,14 @@ var CONFIG = {
   cash: false,                        // set to true to also offer pay on pickup or delivery
   delivery: true,
   deliveryFee: null,                  // delivery cost under the free limit. null means "confirmed on WhatsApp"
-  freeFrom: { island: 20000, mainland: 25000 },   // free delivery from these order totals
+  freeFrom: { island: 25000, mainland: 35000 },   // free delivery from these order totals
   freeUntil: "2026-11-30",
   freeUntilLabel: "30 November 2026",
   address: "Cluster 1, Lekki County Homes, Lekki, Lagos",
   hours: "Pre-order only. Please order at least 24 hours ahead and choose your pickup day at checkout.",
   contact: "WhatsApp 0813 929 6581",
   email: "",                          // complaints email, shown once you add it
-  cupsSold: 105,                      // update this number as your sales grow
+  cupsSold: 255,                      // update this number as your sales grow
   windows: ["Morning", "Afternoon", "Evening"],
   bank: { name: "Moniepoint", account: "53208992122", holder: "" }
 };
@@ -518,7 +573,7 @@ function fee() { if (state.form.mode !== "delivery" || !state.cart.length || fre
 function promoNote() {
   if (!CONFIG.delivery || !offerOn() || !state.cart.length) return "";
   var f = CONFIG.freeFrom;
-  if (state.form.mode !== "delivery") return '<div class="note">Free delivery from ' + naira(f.island) + ' on the Island and ' + naira(f.mainland) + ' on the Mainland.</div>';
+  if (state.form.mode !== "delivery") return '<div class="note">Free delivery on orders of ' + naira(f.island) + ' and above on the Island, and ' + naira(f.mainland) + ' and above on the Mainland.</div>';
   var need = f[state.form.area || "island"] - subtotal();
   return need <= 0 ? '<div class="note">You qualify for free delivery.</div>' : '<div class="note">Add ' + naira(need) + ' more for free delivery.</div>';
 }
@@ -637,7 +692,7 @@ function viewDetails() {
   return head("Your details") + '<div class="pbody">' +
     (CONFIG.delivery ? '<div class="seg" role="radiogroup" aria-label="Pickup or delivery">' +
     '<label class="choice"><input type="radio" name="mode" value="pickup"' + (f.mode === "pickup" ? " checked" : "") + '><span><strong>Pickup</strong><small>Free</small></span></label>' +
-    '<label class="choice"><input type="radio" name="mode" value="delivery"' + (f.mode === "delivery" ? " checked" : "") + '><span><strong>Delivery</strong><small>Free from ' + naira(CONFIG.freeFrom.island) + ' (Island)</small></span></label></div>' : '<div class="note"><strong>Pickup only.</strong> Collect from ' + esc(CONFIG.address) + '.</div>') +
+    '<label class="choice"><input type="radio" name="mode" value="delivery"' + (f.mode === "delivery" ? " checked" : "") + '><span><strong>Delivery</strong><small>Free for ' + naira(CONFIG.freeFrom.island) + ' and above (Island)</small></span></label></div>' : '<div class="note"><strong>Pickup only.</strong> Collect from ' + esc(CONFIG.address) + '.</div>') +
     fld("name", "Your name", "text", 'autocomplete="name"') +
     fld("phone", "Phone number", "tel", 'autocomplete="tel" inputmode="tel" placeholder="0801 234 5678"') +
     (f.mode === "delivery" ? '<label class="f" for="area">Delivery area<select class="in" id="area" name="area">' + areaOpts() + '</select></label><label class="f" for="address">Delivery address<textarea class="in' + (state.errors.address ? " bad" : "") + '" id="address" rows="3" autocomplete="street-address">' + esc(f.address) + '</textarea><span class="err">' + esc(state.errors.address || "") + '</span></label>' : "") +
@@ -646,7 +701,7 @@ function viewDetails() {
       var v = +((f.tops || {})[i.id] || 0);
       return '<label class="toprow"><span>' + i.name + ' <small>(' + i.amt + ' per portion)</small></span><select class="in" data-top="' + i.id + '" aria-label="' + i.name + '">' + [0, 1, 2, 3].map(function (n) { return '<option value="' + n + '"' + (v === n ? " selected" : "") + '>' + (n === 0 ? "None" : n + (n === 1 ? " portion" : " portions") + " (" + naira(n * TOPPINGS.price) + ")") + '</option>'; }).join("") + '</select></label>';
     }).join("") + '</fieldset>' +
-    '<label class="f" for="notes">Notes (optional)<textarea class="in" id="notes" rows="2" placeholder="Allergies, gate code, anything we should know">' + esc(f.notes) + '</textarea></label>' +
+    '<label class="f" for="notes">Notes (optional)<textarea class="in" id="notes" rows="2" placeholder="Gate code, delivery notes. For custom or allergy requests (20 cups or more), tell us exactly what to leave out.">' + esc(f.notes) + '</textarea></label>' +
     '</div><div class="pfoot">' + promoNote() + totalsHtml() + '<div class="seg"><button class="btn ghost" type="button" data-go="cart">Back</button><button class="btn" type="button" data-go="pay">Continue to pay</button></div></div>';
 }
 function payOpt(val, title, sub, off) {
@@ -752,7 +807,7 @@ $("#scrim").addEventListener("click", closePanel);
 load();
 var promoOn = offerOn();
 $("#sampleBar").hidden = !promoOn;
-$("#sampleBar").textContent = "Free delivery on the Island from " + naira(CONFIG.freeFrom.island) + " and on the Mainland from " + naira(CONFIG.freeFrom.mainland) + ", until " + CONFIG.freeUntilLabel + ".";
+$("#sampleBar").textContent = "Free delivery on all orders of " + naira(CONFIG.freeFrom.island) + " and above on the Island, and " + naira(CONFIG.freeFrom.mainland) + " and above on the Mainland, until " + CONFIG.freeUntilLabel + ".";
 $("#joinForm").addEventListener("submit", function (e) {
   e.preventDefault(); var v = $("#joinEmail").value.trim();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { $("#joinNote").textContent = "Please enter a valid email address."; return; }
@@ -764,22 +819,39 @@ $("#joinForm").addEventListener("submit", function (e) {
   var v = $("#reelVid"), b = $("#reelSound"); if (!v) return;
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduce && "IntersectionObserver" in window) { new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); }); }, { threshold: 0.4 }).observe(v); }
+  if (b) b.addEventListener("click", function () {
+    if (!v.muted) { v.muted = true; b.setAttribute("aria-pressed", "false"); b.textContent = "Tap for music"; return; }
+    var hv = $("#heroVid"), hb = $("#heroSound");
+    if (hv && !hv.muted) { hv.muted = true; if (hb) { hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); } }
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+    v.volume = 0.5; v.muted = false; b.textContent = "Mute"; b.setAttribute("aria-pressed", "true");
+  });
+})();
+(function () {
+  var hv = $("#heroVid"), hb = $("#heroSound"); if (!hv || !hb) return;
   var talking = false;
   function say(text, done) {
     var fin = false; function end() { if (fin) return; fin = true; talking = false; done(); }
     try {
       if (!("speechSynthesis" in window)) return end();
-      var u = new SpeechSynthesisUtterance(text); u.lang = "en-GB"; u.rate = 0.92; u.pitch = 1; u.volume = 1;
+      var u = new SpeechSynthesisUtterance(text); u.lang = "en-GB"; u.rate = 0.95; u.pitch = 1.22; u.volume = 0.9;
+      var vs = speechSynthesis.getVoices() || [], pick = null;
+      var prefs = [/google uk english female/i, /samantha/i, /serena/i, /kate/i, /martha/i, /susan/i, /hazel/i, /karen/i, /moira/i, /tessa/i, /fiona/i, /zira/i, /jenny/i, /aria/i, /sonia/i, /libby/i, /female/i];
+      for (var k = 0; k < prefs.length && !pick; k++) { for (var m = 0; m < vs.length; m++) { if (/^en/i.test(vs[m].lang) && prefs[k].test(vs[m].name)) { pick = vs[m]; break; } } }
+      if (pick) { u.voice = pick; u.lang = pick.lang; }
       u.onend = end; u.onerror = end; speechSynthesis.cancel(); talking = true; speechSynthesis.speak(u);
       setTimeout(end, 4500);
     } catch (e) { end(); }
   }
-  b.addEventListener("click", function () {
+  hb.addEventListener("click", function () {
     if (talking) return;
-    if (!v.muted) { v.muted = true; b.setAttribute("aria-pressed", "false"); b.textContent = "Tap for sound"; try { speechSynthesis.cancel(); } catch (e) {} return; }
-    var p = v.play(); if (p && p.catch) p.catch(function () {});
-    b.textContent = "Welcome..."; b.setAttribute("aria-pressed", "true");
-    say("Welcome to Clarke's Goodness.", function () { v.volume = 0.55; v.muted = false; b.textContent = "Mute"; });
+    if (!hv.muted) { hv.muted = true; hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); try { speechSynthesis.cancel(); } catch (e) {} return; }
+    var rv = $("#reelVid"), rb = $("#reelSound");
+    if (rv && !rv.muted) { rv.muted = true; if (rb) { rb.textContent = "Tap for music"; rb.setAttribute("aria-pressed", "false"); } }
+    var p = hv.play(); if (p && p.catch) p.catch(function () {});
+    hb.textContent = "Welcome..."; hb.setAttribute("aria-pressed", "true");
+    try { track("hero_sound_on"); } catch (e) {}
+    say("Welcome to Clarke's Goodness.", function () { hv.volume = 0.8; hv.muted = false; hb.textContent = "Mute"; });
   });
 })();
 (function () {
