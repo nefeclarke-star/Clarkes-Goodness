@@ -541,7 +541,7 @@ var CONFIG = {
   address: "Cluster 1, Lekki County Homes, Lekki, Lagos",
   hours: "Pre-order only. Please order at least 24 hours ahead and choose your pickup day at checkout.",
   contact: "WhatsApp 0813 929 6581",
-  email: "",                          // complaints email, shown once you add it
+  email: "clarkesparfait@gmail.com",  // complaints and enquiries email
   cupsSold: 255,                      // update this number as your sales grow
   windows: ["Morning", "Afternoon", "Evening"],
   bank: { name: "Moniepoint", account: "53208992122", holder: "" }
@@ -872,7 +872,8 @@ $("#joinForm").addEventListener("submit", function (e) {
 })();
 $("#bulkWa").addEventListener("click", function () { track("catering_enquiry"); });
 $("#bulkWa").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent("Hello Clarke's Goodness, I would like a quote for a function, supermarket supply or collaboration.");
-$("#vAddress").textContent = CONFIG.address; $("#vHours").textContent = CONFIG.hours; $("#vContact").textContent = CONFIG.contact + (CONFIG.email ? "\nComplaints: " + CONFIG.email : "");
+$("#vAddress").textContent = CONFIG.address; $("#vHours").textContent = CONFIG.hours; $("#vContact").textContent = CONFIG.contact;
+if (CONFIG.email) { var vc = $("#vContact"), ea = document.createElement("a"); ea.href = "mailto:" + CONFIG.email; ea.textContent = CONFIG.email; vc.appendChild(document.createElement("br")); vc.appendChild(document.createTextNode("Complaints and enquiries: ")); vc.appendChild(ea); }
 $("#yr").textContent = new Date().getFullYear();
 syncBar();
 renderMenu();
