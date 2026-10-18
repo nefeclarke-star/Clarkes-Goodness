@@ -439,7 +439,7 @@ footer.band { padding: 22px 16px; }
 
   <section id="watch" aria-labelledby="watchh">
     <div class="sec-head"><h2 id="watchh">See the goodness</h2><p>A quick look at what goes into every cup.</p></div>
-    <div class="watchgrid"><div class="reelwrap"><div class="reelframe"><video id="reelVid" class="reelv" muted loop playsinline preload="metadata" poster="cup-poster.jpg" aria-label="Our parfait cups, freshly made"><source src="cups-music.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="reelSound" aria-pressed="false">Tap for music</button></div></div><div class="watchtext"><h3>Fresh, measured and filling.</h3><p>Fresh fruit, crunchy granola and nuts, layered over creamy Greek yogurt. Every ingredient is measured, and every cup is made to order.</p><a class="btn" href="#menu">Start shopping</a></div></div>
+    <div class="watchgrid"><div class="reelwrap"><div class="reelframe"><video id="reelVid" class="reelv" muted loop playsinline preload="metadata" poster="hero-poster.jpg" aria-label="Welcome to Clarke's Goodness, fresh parfaits"><source src="hero-welcome.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="reelSound" aria-pressed="false">Tap for sound</button></div></div><div class="watchtext"><h3>Fresh, measured and filling.</h3><p>Fresh fruit, crunchy granola and nuts, layered over creamy Greek yogurt. Every ingredient is measured, and every cup is made to order.</p><a class="btn" href="#menu">Start shopping</a></div></div>
   </section>
 
   <section id="how" class="band pink" aria-labelledby="howh">
@@ -826,7 +826,7 @@ $("#joinForm").addEventListener("submit", function (e) {
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduce && "IntersectionObserver" in window) { new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); }); }, { threshold: 0.4 }).observe(v); }
   if (b) b.addEventListener("click", function () {
-    if (!v.muted) { v.muted = true; b.setAttribute("aria-pressed", "false"); b.textContent = "Tap for music"; return; }
+    if (!v.muted) { v.muted = true; b.setAttribute("aria-pressed", "false"); b.textContent = "Tap for sound"; return; }
     try { speechSynthesis.cancel(); } catch (e) {}
     var hv = $("#heroVid"), hb = $("#heroSound");
     if (hv && !hv.muted) { hv.muted = true; if (hb) { hb.textContent = "Tap for music"; hb.setAttribute("aria-pressed", "false"); } }
@@ -853,7 +853,7 @@ $("#joinForm").addEventListener("submit", function (e) {
   hb.addEventListener("click", function () {
     if (!hv.muted) { hv.muted = true; hb.textContent = "Tap for music"; hb.setAttribute("aria-pressed", "false"); return; }
     var rv = $("#reelVid"), rb = $("#reelSound");
-    if (rv && !rv.muted) { rv.muted = true; if (rb) { rb.textContent = "Tap for music"; rb.setAttribute("aria-pressed", "false"); } }
+    if (rv && !rv.muted) { rv.muted = true; if (rb) { rb.textContent = "Tap for sound"; rb.setAttribute("aria-pressed", "false"); } }
     try { hv.currentTime = 0; } catch (e) {}
     hv.volume = 0.9; hv.muted = false;
     var p = hv.play(); if (p && p.catch) p.catch(function () {});
