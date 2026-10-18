@@ -413,7 +413,7 @@ footer.band { padding: 22px 16px; }
     </div>
     <div class="stage">
       <div class="cup" aria-hidden="true"></div>
-      <div class="vframe"><video id="heroVid" class="hv" autoplay muted loop playsinline preload="metadata" poster="hero-poster.jpg" aria-label="Fresh fruit parfaits being prepared"><source src="hero-welcome.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="heroSound" aria-pressed="false">Tap for sound</button></div>
+      <div class="vframe"><video id="heroVid" class="hv" autoplay muted loop playsinline preload="metadata" poster="hero-goodness-poster.jpg" aria-label="Fresh Clarke's Goodness parfaits with fruit and nuts"><source src="hero-goodness.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="heroSound" aria-pressed="false">Tap for music</button></div>
       <div class="welcome" aria-hidden="true"><span>Welcome to</span><b>Clarke's Goodness</b></div><span class="tag t1">Chilled</span><span class="tag t2">Fresh fruit</span><span class="tag t3">Made to order</span>
     </div>
   </div>
@@ -829,7 +829,7 @@ $("#joinForm").addEventListener("submit", function (e) {
     if (!v.muted) { v.muted = true; b.setAttribute("aria-pressed", "false"); b.textContent = "Tap for music"; return; }
     try { speechSynthesis.cancel(); } catch (e) {}
     var hv = $("#heroVid"), hb = $("#heroSound");
-    if (hv && !hv.muted) { hv.muted = true; if (hb) { hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); } }
+    if (hv && !hv.muted) { hv.muted = true; if (hb) { hb.textContent = "Tap for music"; hb.setAttribute("aria-pressed", "false"); } }
     var p = v.play(); if (p && p.catch) p.catch(function () {});
     v.volume = 0.8; v.muted = false; b.textContent = "Mute"; b.setAttribute("aria-pressed", "true");
   });
@@ -851,7 +851,7 @@ $("#joinForm").addEventListener("submit", function (e) {
     } catch (e) { end(); }
   }
   hb.addEventListener("click", function () {
-    if (!hv.muted) { hv.muted = true; hb.textContent = "Tap for sound"; hb.setAttribute("aria-pressed", "false"); return; }
+    if (!hv.muted) { hv.muted = true; hb.textContent = "Tap for music"; hb.setAttribute("aria-pressed", "false"); return; }
     var rv = $("#reelVid"), rb = $("#reelSound");
     if (rv && !rv.muted) { rv.muted = true; if (rb) { rb.textContent = "Tap for music"; rb.setAttribute("aria-pressed", "false"); } }
     try { hv.currentTime = 0; } catch (e) {}
