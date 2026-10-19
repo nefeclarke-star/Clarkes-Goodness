@@ -115,6 +115,10 @@ section { padding-block: 56px; }
 .item { background: var(--surface); border: 2px solid var(--line); border-radius: 26px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
 .art { background: var(--soft); height: 170px; display: grid; place-items: center; padding: 8px; }
 .art.photo { padding: 0; height: auto; background: #fff; }
+.art.photo { position: relative; }
+.shots { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; gap: 2px; padding: 3px; background: rgba(255,255,255,.92); border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,.18); z-index: 2; }
+.shots button { border: 0; background: transparent; font-family: inherit; font-weight: 700; font-size: 12px; line-height: 1; padding: 7px 12px; border-radius: 999px; cursor: pointer; color: #333; }
+.shots button[aria-pressed="true"] { background: #2F4F3E; color: #fff; }
 .art.photo.sq { aspect-ratio: 1 / 1; } .art.photo.wide { aspect-ratio: 5 / 4; }
 .art.photo img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; }
 .art svg { width: 100%; height: 100%; }
@@ -564,7 +568,7 @@ var TOPPINGS = { price: 1000, items: [
   { id: "coconut", name: "Coconut shavings", amt: "10 pieces" },
   { id: "granola", name: "Crunchy granola", amt: "2 tablespoons" }
 ] };
-var state = { cat: "parfaits", size: {}, cart: [], view: "cart", form: { name: "", phone: "", email: "", mode: "pickup", area: "island", address: "", when: "", notes: "", pay: "transfer", tops: {} }, errors: {}, order: null };
+var state = { cat: "parfaits", size: {}, shot: {}, cart: [], view: "cart", form: { name: "", phone: "", email: "", mode: "pickup", area: "island", address: "", when: "", notes: "", pay: "transfer", tops: {} }, errors: {}, order: null };
 
 function naira(n) { return "₦" + Number(n).toLocaleString("en-NG"); }
 function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -651,7 +655,7 @@ function renderMenu() {
       var btns = ["r", "l"].filter(function (k) { return m[k]; }).map(function (k) {
         return '<button type="button" class="size" data-size="' + k + '" data-id="' + m.id + '" aria-pressed="' + (sz === k || !m.l) + '"><span>' + sizeLabel(m, k) + '</span><strong>' + naira(m[k]) + '</strong></button>';
       }).join("");
-      return '<article class="item' + (m.group === "Greek yogurt" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " sq" : " wide") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "l" ? "330" : "250") : (m.id === "yogurt-sweet" ? "yog-sweet" : "yog-plain")) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
+      return '<article class="item' + (m.group === "Greek yogurt" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " sq" : " wide") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "l" ? "330" : (state.shot[m.id] === "open" ? "250-open" : "250")) : (m.id === "yogurt-sweet" ? "yog-sweet" : "yog-plain")) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + (m.group === "Parfaits" && sz !== "l" ? (state.shot[m.id] === "open" ? ", top view" : ", covered") : "") + '" loading="lazy">' + (m.group === "Parfaits" && sz !== "l" ? '<div class="shots" role="group" aria-label="Photo view"><button type="button" data-shot="cover" data-id="' + m.id + '" aria-pressed="' + (state.shot[m.id] !== "open") + '">Covered</button><button type="button" data-shot="open" data-id="' + m.id + '" aria-pressed="' + (state.shot[m.id] === "open") + '">Top view</button></div>' : "") + '</div>' +
         '<div class="body"><span class="pill">' + esc(m.tag) + '</span><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p>' +
         '<p class="shelf"><b>No preservatives.</b> Shelf life is 4 days. Keep chilled.</p>' +
         '<div class="sizes" role="group" aria-label="Size for ' + esc(m.name) + '">' + btns + '</div>' +
@@ -781,6 +785,7 @@ function readForm() {
 document.addEventListener("click", function (e) {
   var t = e.target.closest("button, a, .tab"); if (!t) return;
   if (t.classList.contains("tab")) { state.cat = t.dataset.cat; return renderMenu(); }
+  if (t.dataset.shot) { state.shot[t.dataset.id] = t.dataset.shot; return renderMenu(); }
   if (t.dataset.size) { state.size[t.dataset.id] = t.dataset.size; return renderMenu(); }
   if (t.dataset.add) {
     var id = t.dataset.add, sz = state.size[id] || "r", hit = state.cart.filter(function (l) { return l.id === id && l.size === sz; })[0];
