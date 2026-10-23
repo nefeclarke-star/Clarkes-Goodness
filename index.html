@@ -588,10 +588,10 @@ var PHOTO = { "yogurt-sweet": "yog-sweet", "yogurt-plain": "yog-plain", "yogurt-
 function sizeLabel(m, k) { return (m.lab && m.lab[k]) || SIZE_LABEL[k]; }
 
 var $ = function (s, r) { return (r || document).querySelector(s); };
-var TOPPINGS = { price: 1000, items: [
+var TOPPINGS = { price: 500, items: [
+  { id: "dried-fruits", name: "Dried fruits", amt: "2 tablespoons" },
+  { id: "coconut", name: "Coconut shavings", amt: "2 tablespoons" },
   { id: "cashew", name: "Cashew nuts", amt: "10 pieces" },
-  { id: "almond", name: "Almond nuts", amt: "10 pieces" },
-  { id: "coconut", name: "Coconut shavings", amt: "10 pieces" },
   { id: "granola", name: "Crunchy granola", amt: "2 tablespoons" }
 ] };
 var state = { cat: "parfaits", size: {}, shot: {}, cart: [], view: "cart", form: { name: "", phone: "", email: "", mode: "pickup", area: "island", address: "", when: "", notes: "", pay: "transfer", tops: {} }, errors: {}, order: null };
