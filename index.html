@@ -384,6 +384,15 @@ footer.band { padding: 22px 16px; }
 .item p.shelf { flex: none; background: var(--lime); color: #2E3B2D; font-size: 14px; font-weight: 600; line-height: 1.4; padding: 10px 12px; border-radius: 12px; }
 .item p.shelf b { font-weight: 800; }
 @media (min-width: 1000px) { #menuView .item.yog { height: auto; align-self: start; } }
+/* real tub photos (portrait) and the 5 liter section */
+.art.photo.tub { aspect-ratio: 4 / 5; }
+.art.photo.tub img { object-position: center center; }
+.g5 { margin-top: 34px; }
+@media (min-width: 1000px) {
+  #menuView .g5 { grid-column: 1 / -1; order: 3; margin-top: 18px; }
+  #menuView .g5 .grp { margin-bottom: 18px; }
+  #menuView .g5 .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; align-items: start; }
+}
 </style>
 </head>
 <body>
@@ -553,8 +562,12 @@ var MENU = [
   { id: "goodness-cup", group: "Parfaits", name: "Goodness in a Cup", tag: "Sweetened", desc: "Greek yogurt sweetened with regular sugar, layered with fresh fruit, very crunchy granola made with the finest ingredients, and nuts. Every ingredient is measured, so even if you are on a weight loss journey, you can enjoy some goodness.", r: 4000, l: 5000, c: ["--berry", "--mango", "--blue"] },
   { id: "lean-goodness", group: "Parfaits", name: "Lean Goodness", tag: "Unsweetened", desc: "Made with unsweetened Greek yogurt with absolutely no added sugar, only the natural sugars from the fruit, plus very crunchy granola made with the finest ingredients and a measured portion of nuts. Every ingredient is measured. Contains nuts.", r: 4000, l: 5000, c: ["--leaf", "--mango", "--berry"] },
   { id: "yogurt-sweet", group: "Greek yogurt", name: "Plain Greek Yogurt, Sweetened", tag: "Sweetened", desc: "Thick, creamy plain Greek yogurt, lightly sweetened.", r: 4000, lab: { r: "500 ml" }, c: ["--mango", "--surface", "--berry"] },
-  { id: "yogurt-plain", group: "Greek yogurt", name: "Plain Greek Yogurt, Unsweetened", tag: "Unsweetened", desc: "Thick, creamy plain Greek yogurt with no added sugar.", r: 4000, lab: { r: "500 ml" }, c: ["--mango", "--surface", "--leaf"] }
+  { id: "yogurt-plain", group: "Greek yogurt", name: "Plain Greek Yogurt, Unsweetened", tag: "Unsweetened", desc: "Thick, creamy plain Greek yogurt with no added sugar.", r: 4000, lab: { r: "500 ml" }, c: ["--mango", "--surface", "--leaf"] },
+  { id: "yogurt-5l-sweet", group: "Greek yogurt 5 L", name: "Plain Greek Yogurt, Sweetened", tag: "Sweetened", desc: "Thick, creamy plain Greek yogurt, lightly sweetened, in a 5 liter tub. Great for functions, offices, gyms and big families.", r: 25000, lab: { r: "5 liters" }, c: ["--mango", "--surface", "--berry"] },
+  { id: "yogurt-5l-plain", group: "Greek yogurt 5 L", name: "Plain Greek Yogurt, Unsweetened", tag: "Unsweetened", desc: "Thick, creamy plain Greek yogurt with no added sugar, in a 5 liter tub. Great for functions, offices, gyms and big families.", r: 25000, lab: { r: "5 liters" }, c: ["--mango", "--surface", "--leaf"] }
 ];
+var GROUP_TITLE = { "Parfaits": "Parfaits", "Greek yogurt": "Greek yogurt, 500 ml", "Greek yogurt 5 L": "Greek yogurt, 5 liters" };
+var PHOTO = { "yogurt-sweet": "yog-sweet", "yogurt-plain": "yog-plain", "yogurt-5l-sweet": "yog5-sweet", "yogurt-5l-plain": "yog5-plain" };
 function sizeLabel(m, k) { return (m.lab && m.lab[k]) || SIZE_LABEL[k]; }
 
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -645,18 +658,18 @@ function renderMenu() {
   var v = $("#menuView");
   Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (t) { t.setAttribute("aria-selected", String(t.dataset.cat === state.cat)); });
   if (state.cat === "drinks") { v.innerHTML = '<div class="soon"><h3>Healthy drinks are coming</h3><p>Fresh fruit and vegetable drinks are in the works. Order a parfait while you wait.</p></div>'; return; }
-  v.innerHTML = ["Parfaits", "Greek yogurt"].map(function (g) {
-    return '<h3 class="grp">' + g + '</h3><div class="grid">' + MENU.filter(function (m) { return m.group === g; }).map(function (m) {
+  v.innerHTML = ["Parfaits", "Greek yogurt", "Greek yogurt 5 L"].map(function (g) {
+    return (g === "Greek yogurt 5 L" ? '<section class="g5">' : "") + '<h3 class="grp">' + GROUP_TITLE[g] + '</h3><div class="grid">' + MENU.filter(function (m) { return m.group === g; }).map(function (m) {
       var sz = state.size[m.id] || "r";
       var btns = ["r", "l"].filter(function (k) { return m[k]; }).map(function (k) {
         return '<button type="button" class="size" data-size="' + k + '" data-id="' + m.id + '" aria-pressed="' + (sz === k || !m.l) + '"><span>' + sizeLabel(m, k) + '</span><strong>' + naira(m[k]) + '</strong></button>';
       }).join("");
-      return '<article class="item' + (m.group === "Greek yogurt" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " sq" : " wide") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "l" ? "330" : "250") : (m.id === "yogurt-sweet" ? "yog-sweet" : "yog-plain")) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
+      return '<article class="item' + (m.group !== "Parfaits" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " sq" : " tub") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "l" ? "330" : "250") : PHOTO[m.id]) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
         '<div class="body"><span class="pill">' + esc(m.tag) + '</span><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p>' +
         '<p class="shelf"><b>No preservatives.</b> Best consumed within 5 days. Keep chilled.</p>' +
         '<div class="sizes" role="group" aria-label="Size for ' + esc(m.name) + '">' + btns + '</div>' +
         '<button type="button" class="btn" data-add="' + m.id + '">Add to cart</button></div></article>';
-    }).join("") + '</div>';
+    }).join("") + '</div>' + (g === "Greek yogurt 5 L" ? "</section>" : "");
   }).join("");
 }
 
