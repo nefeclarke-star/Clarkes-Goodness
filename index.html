@@ -393,6 +393,17 @@ footer.band { padding: 22px 16px; }
   #menuView .g5 .grp { margin-bottom: 18px; }
   #menuView .g5 .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; align-items: start; }
 }
+
+/* spatial showcase: 3D tilt + depth parallax */
+.spatial { display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; justify-items: center; padding-block: 28px; }
+.sp-stage { perspective: 1100px; width: min(100%, 400px); }
+.sp-card { position: relative; aspect-ratio: 3 / 4; border-radius: 28px; overflow: hidden; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .18s ease-out; box-shadow: 0 28px 60px -18px rgba(60,12,24,.45), 0 8px 18px -8px rgba(60,12,24,.25); background: #EFE3D3; will-change: transform; }
+.sp-img { position: absolute; inset: -8%; width: 116%; height: 116%; max-width: none; object-fit: cover; transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(1.04); transition: transform .18s ease-out; will-change: transform; }
+.sp-glare { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), rgba(255,255,255,.38), rgba(255,255,255,0) 55%); mix-blend-mode: soft-light; }
+.spatial-text h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.12; margin-bottom: 12px; }
+.spatial-text p { font-size: 18px; font-weight: 600; color: #2E3B2D; margin-bottom: 20px; max-width: 44ch; }
+@media (min-width: 820px) { .spatial { grid-template-columns: minmax(0, 400px) minmax(0, 440px); justify-content: center; gap: 56px; } }
+@media (prefers-reduced-motion: reduce) { .sp-card, .sp-img { transition: none; transform: none; } .sp-img { inset: 0; width: 100%; height: 100%; } .sp-glare { display: none; } }
 </style>
 </head>
 <body>
@@ -458,6 +469,12 @@ footer.band { padding: 22px 16px; }
       <div class="step"><b>2</b><h3>Pay</h3><p>Pay by bank transfer to Moniepoint, then send us your receipt.</p></div>
       <div class="step"><b>3</b><h3>Collect</h3><p>Pick it up fresh from Lekki County Homes on the day you chose.</p></div>
     </div>
+  </section>
+
+  <section id="spatial" aria-labelledby="spatialh">
+    <div class="sec-head"><h2 id="spatialh">Fresh, creamy, crunchy</h2><p>Move your mouse or finger over the cup.</p></div>
+    <div class="spatial"><div class="sp-stage"><div class="sp-card" id="spCard"><img class="sp-img" id="spImg" src="spatial-parfait.jpg" alt="A Clarke's Goodness parfait cup surrounded by floating kiwi slices, red grapes, cashew nuts, granola and splashes of creamy Greek yogurt" loading="lazy" width="900" height="1600"><div class="sp-glare" aria-hidden="true"></div></div></div>
+    <div class="spatial-text"><h3>Every layer, made to order.</h3><p>Creamy Greek yogurt, juicy fruit, cashew nuts and very crunchy granola, layered fresh for you.</p><a class="btn" href="#menu">See the menu</a></div></div>
   </section>
 
   <section id="goodcta" class="goodcta" aria-label="Order now">
@@ -900,5 +917,38 @@ renderMenu();
 })();
 </script>
 
+<script>
+(function () {
+  var card = document.getElementById("spCard"), img = document.getElementById("spImg");
+  if (!card || !img || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+  var stage = card.parentNode, hovering = false;
+  function set(rx, ry, tx, ty, gx, gy) {
+    card.style.setProperty("--rx", rx.toFixed(2) + "deg"); card.style.setProperty("--ry", ry.toFixed(2) + "deg");
+    card.style.setProperty("--tx", tx.toFixed(1) + "px"); card.style.setProperty("--ty", ty.toFixed(1) + "px");
+    card.style.setProperty("--gx", gx.toFixed(0) + "%"); card.style.setProperty("--gy", gy.toFixed(0) + "%");
+  }
+  function point(e) {
+    var r = stage.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
+    var x = Math.max(0, Math.min(1, (t.clientX - r.left) / r.width)), y = Math.max(0, Math.min(1, (t.clientY - r.top) / r.height));
+    hovering = true;
+    set((0.5 - y) * 16, (x - 0.5) * 18, (0.5 - x) * 26, (0.5 - y) * 26, x * 100, y * 100);
+  }
+  function scrolled() {
+    if (hovering) return;
+    var r = stage.getBoundingClientRect(), vh = window.innerHeight || 800;
+    var p = Math.max(-1, Math.min(1, ((r.top + r.height / 2) - vh / 2) / vh));
+    set(p * -9, 0, 0, p * 24, 50, 30 + p * 30);
+  }
+  function rest() { hovering = false; scrolled(); }
+  stage.addEventListener("mousemove", point);
+  stage.addEventListener("mouseleave", rest);
+  stage.addEventListener("touchstart", point, { passive: true });
+  stage.addEventListener("touchmove", point, { passive: true });
+  stage.addEventListener("touchend", function () { setTimeout(rest, 700); });
+  window.addEventListener("scroll", function () { requestAnimationFrame(scrolled); }, { passive: true });
+  window.addEventListener("resize", scrolled);
+  scrolled();
+})();
+</script>
 </body>
 </html>
