@@ -318,6 +318,12 @@ footer.band { padding: 22px 16px; }
 .reelwrap { display: grid; place-items: center; }
 .reelframe { position: relative; width: min(100%, 420px); aspect-ratio: 4 / 5; border-radius: 28px; overflow: hidden; background: #000; box-shadow: 0 14px 40px rgba(20,35,26,.25); }
 .reelv { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* 3D tilt on the watch video, same effect as the parfait card */
+.reelwrap { perspective: 1100px; }
+.reelframe { transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .18s ease-out; will-change: transform; box-shadow: 0 28px 60px -18px rgba(60,12,24,.45), 0 8px 18px -8px rgba(60,12,24,.25); }
+.reelframe .reelv { position: absolute; inset: -6%; width: 112%; height: 112%; max-width: none; transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(1.03); transition: transform .18s ease-out; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .reelframe { transition: none; transform: none; } .reelframe .reelv { inset: 0; width: 100%; height: 100%; transform: none; transition: none; } .reelframe .sp-glare { display: none; } }
 .reelbtn { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); border: 0; border-radius: 999px; padding: 10px 18px; font: inherit; font-weight: 800; background: rgba(255,255,255,.92); color: var(--ink); min-height: 44px; cursor: pointer; }
 .story { max-width: 720px; margin-inline: auto; text-align: center; }
 .story h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 5vw, 46px); line-height: 1.12; margin: 8px 0 18px; }
@@ -459,7 +465,7 @@ footer.band { padding: 22px 16px; }
 
   <section id="watch" aria-labelledby="watchh">
     <div class="sec-head"><h2 id="watchh">See the goodness</h2><p>A quick look at what goes into every cup.</p></div>
-    <div class="watchgrid"><div class="reelwrap"><div class="reelframe"><video id="reelVid" class="reelv" muted loop playsinline preload="metadata" poster="hero-goodness-poster.jpg" aria-label="Our real parfait cups, freshly made"><source src="hero-goodness.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="reelSound" aria-pressed="false">Tap for music</button></div></div><div class="watchtext"><h3>Fresh, measured and filling.</h3><p>Fresh fruit, crunchy granola and nuts, layered over creamy Greek yogurt. Every ingredient is measured, and every cup is made to order.</p><a class="btn" href="#menu">Start shopping</a></div></div>
+    <div class="watchgrid"><div class="reelwrap"><div class="reelframe"><video id="reelVid" class="reelv" muted loop playsinline preload="metadata" poster="hero-goodness-poster.jpg" aria-label="Our real parfait cups, freshly made"><source src="hero-goodness.mp4" type="video/mp4"></video><div class="sp-glare" aria-hidden="true"></div><button type="button" class="reelbtn" id="reelSound" aria-pressed="false">Tap for music</button></div></div><div class="watchtext"><h3>Fresh, measured and filling.</h3><p>Fresh fruit, crunchy granola and nuts, layered over creamy Greek yogurt. Every ingredient is measured, and every cup is made to order.</p><a class="btn" href="#menu">Start shopping</a></div></div>
   </section>
 
   <section id="how" class="band pink" aria-labelledby="howh">
@@ -939,6 +945,40 @@ renderMenu();
     var r = stage.getBoundingClientRect(), vh = window.innerHeight || 800;
     var p = Math.max(-1, Math.min(1, ((r.top + r.height / 2) - vh / 2) / vh));
     set(p * -9, 0, 0, p * 24, 50, 30 + p * 30);
+  }
+  function rest() { hovering = false; scrolled(); }
+  stage.addEventListener("mousemove", point);
+  stage.addEventListener("mouseleave", rest);
+  stage.addEventListener("touchstart", point, { passive: true });
+  stage.addEventListener("touchmove", point, { passive: true });
+  stage.addEventListener("touchend", function () { setTimeout(rest, 700); });
+  window.addEventListener("scroll", function () { requestAnimationFrame(scrolled); }, { passive: true });
+  window.addEventListener("resize", scrolled);
+  scrolled();
+})();
+</script>
+
+<script>
+(function () {
+  var card = document.querySelector(".reelframe");
+  if (!card || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+  var stage = card.parentNode, hovering = false;
+  function set(rx, ry, tx, ty, gx, gy) {
+    card.style.setProperty("--rx", rx.toFixed(2) + "deg"); card.style.setProperty("--ry", ry.toFixed(2) + "deg");
+    card.style.setProperty("--tx", tx.toFixed(1) + "px"); card.style.setProperty("--ty", ty.toFixed(1) + "px");
+    card.style.setProperty("--gx", gx.toFixed(0) + "%"); card.style.setProperty("--gy", gy.toFixed(0) + "%");
+  }
+  function point(e) {
+    var r = card.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
+    var x = Math.max(0, Math.min(1, (t.clientX - r.left) / r.width)), y = Math.max(0, Math.min(1, (t.clientY - r.top) / r.height));
+    hovering = true;
+    set((0.5 - y) * 14, (x - 0.5) * 16, (0.5 - x) * 22, (0.5 - y) * 22, x * 100, y * 100);
+  }
+  function scrolled() {
+    if (hovering) return;
+    var r = stage.getBoundingClientRect(), vh = window.innerHeight || 800;
+    var p = Math.max(-1, Math.min(1, ((r.top + r.height / 2) - vh / 2) / vh));
+    set(p * -8, 0, 0, p * 20, 50, 30 + p * 30);
   }
   function rest() { hovering = false; scrolled(); }
   stage.addEventListener("mousemove", point);
