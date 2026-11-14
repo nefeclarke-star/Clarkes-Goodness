@@ -448,7 +448,7 @@ footer.band { padding: 22px 16px; }
     <div class="story">
       <p class="eyebrow">Our mission</p>
       <h2 id="storyh">To make eating well something you look forward to doing.</h2>
-      <p>Every cup is made fresh from Greek yogurt, fruit, granola and nuts, and every ingredient is measured. Want a treat? Go for Goodness in a Cup. Watching your sugar? Lean Goodness is unsweetened.</p>
+      <p>Every cup is made fresh from Greek yogurt, fruit, granola and nuts, and every ingredient is measured. Pick your size: Mini, Midi or Max Goodness in a Cup.</p>
       <p>On a weight loss journey, training, or just want something fresh? There is a cup here for you.</p>
       <p class="storysign">Healthy habits, sweeter days.</p>
     </div>
@@ -471,7 +471,7 @@ footer.band { padding: 22px 16px; }
   <section id="how" class="band pink" aria-labelledby="howh">
     <div class="sec-head"><h2 id="howh">Order in three steps</h2><p>No account needed. It takes about two minutes.</p></div>
     <div class="steps">
-      <div class="step"><b>1</b><h3>Pick</h3><p>Choose Goodness in a Cup or Lean Goodness and add it to your cart.</p></div>
+      <div class="step"><b>1</b><h3>Pick</h3><p>Choose a Mini, Midi or Max Goodness in a Cup and add it to your cart.</p></div>
       <div class="step"><b>2</b><h3>Pay</h3><p>Pay by bank transfer to Moniepoint, then send us your receipt.</p></div>
       <div class="step"><b>3</b><h3>Collect</h3><p>Pick it up fresh from Lekki County Homes on the day you chose.</p></div>
     </div>
@@ -584,8 +584,7 @@ var CONFIG = {
 
 var SIZE_LABEL = { r: "250 ml", l: "330 ml", xl: "500 ml" };
 var MENU = [
-  { id: "goodness-cup", group: "Parfaits", name: "Goodness in a Cup", tag: "Sweetened", desc: "Greek yogurt sweetened with regular sugar, layered with fresh fruit, very crunchy granola made with the finest ingredients, and nuts. Every ingredient is measured, so even if you are on a weight loss journey, you can enjoy some goodness.", r: 4000, l: 5500, xl: 7000, c: ["--berry", "--mango", "--blue"] },
-  { id: "lean-goodness", group: "Parfaits", name: "Lean Goodness", tag: "Unsweetened", desc: "Made with unsweetened Greek yogurt with absolutely no added sugar, only the natural sugars from the fruit, plus very crunchy granola made with the finest ingredients and a measured portion of nuts. Every ingredient is measured. Contains nuts.", r: 4000, l: 5500, xl: 7000, c: ["--leaf", "--mango", "--berry"] },
+  { id: "goodness-cup", group: "Parfaits", name: "Goodness in a Cup", names: { r: "Mini Goodness in a Cup", l: "Midi Goodness in a Cup", xl: "Max Goodness in a Cup" }, tag: "Sweetened", desc: "Greek yogurt sweetened with regular sugar, layered with fresh fruit, very crunchy granola made with the finest ingredients, and nuts. Every ingredient is measured, so even if you are on a weight loss journey, you can enjoy some goodness.", r: 4000, l: 5500, xl: 7000, c: ["--berry", "--mango", "--blue"] },
   { id: "yogurt-sweet", group: "Greek yogurt", name: "Plain Greek Yogurt, Sweetened", tag: "Sweetened", desc: "Thick, creamy plain Greek yogurt, lightly sweetened.", r: 5000, lab: { r: "500 ml" }, c: ["--mango", "--surface", "--berry"] },
   { id: "yogurt-plain", group: "Greek yogurt", name: "Plain Greek Yogurt, Unsweetened", tag: "Unsweetened", desc: "Thick, creamy plain Greek yogurt with no added sugar.", r: 5000, lab: { r: "500 ml" }, c: ["--mango", "--surface", "--leaf"] },
   { id: "yogurt-5l-sweet", group: "Greek yogurt 5 L", name: "Plain Greek Yogurt, Sweetened", tag: "Sweetened", desc: "Thick, creamy plain Greek yogurt, lightly sweetened, in a 5 liter tub. Great for functions, offices, gyms and big families.", r: 20000, lab: { r: "5 liters" }, c: ["--mango", "--surface", "--berry"] },
@@ -593,6 +592,7 @@ var MENU = [
 ];
 var GROUP_TITLE = { "Parfaits": "Parfaits", "Greek yogurt": "Greek yogurt, 500 ml", "Greek yogurt 5 L": "Greek yogurt, 5 liters" };
 var PHOTO = { "yogurt-sweet": "yog-sweet", "yogurt-plain": "yog-plain", "yogurt-5l-sweet": "yog5-sweet", "yogurt-5l-plain": "yog5-plain" };
+function nameOf(m, k) { return (m.names && m.names[k]) || m.name; }
 function sizeLabel(m, k) { return (m.lab && m.lab[k]) || SIZE_LABEL[k]; }
 
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -690,9 +690,9 @@ function renderMenu() {
         return '<button type="button" class="size" data-size="' + k + '" data-id="' + m.id + '" aria-pressed="' + (sz === k || !m.l) + '"><span>' + sizeLabel(m, k) + '</span><strong>' + naira(m[k]) + '</strong></button>';
       }).join("");
       return '<article class="item' + (m.group !== "Parfaits" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " wide" : " tub") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "r" ? "250" : sz === "l" ? "330" : "500") : PHOTO[m.id]) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
-        '<div class="body"><span class="pill">' + esc(m.tag) + '</span><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p>' +
+        '<div class="body"><span class="pill">' + esc(m.tag) + '</span><h3>' + esc(nameOf(m, sz)) + '</h3><p>' + esc(m.desc) + '</p>' +
         '<p class="shelf"><b>No preservatives.</b> Best consumed within 5 days. Keep chilled.</p>' +
-        '<div class="sizes" role="group" aria-label="Size for ' + esc(m.name) + '">' + btns + '</div>' +
+        '<div class="sizes" role="group" aria-label="Size for ' + esc(nameOf(m, sz)) + '">' + btns + '</div>' +
         '<button type="button" class="btn" data-add="' + m.id + '">Add to cart</button></div></article>';
     }).join("") + '</div>' + (g === "Greek yogurt 5 L" ? "</section>" : "");
   }).join("");
@@ -721,8 +721,8 @@ function viewCart() {
   if (!state.cart.length) return head("Your cart") + '<div class="pbody"><div class="empty"><div class="emptyart" aria-hidden="true">&#127827;</div><p><strong>You need some goodness in your cart.</strong></p><p>Fresh parfaits and Greek yogurt are waiting for you.</p></div></div><div class="pfoot"><button class="btn" type="button" data-shop>Start shopping</button></div>';
   var lines = state.cart.map(function (l, i) {
     var m = find(l.id);
-    return '<div class="line"><div><strong>' + esc(m.name) + '</strong><br><small>' + sizeLabel(m, l.size) + '</small></div><div class="price">' + naira(m[l.size] * l.qty) + '</div>' +
-      '<div class="qty"><button type="button" data-dec="' + i + '" aria-label="Fewer ' + esc(m.name) + '">−</button><span aria-live="polite">' + l.qty + '</span><button type="button" data-inc="' + i + '" aria-label="More ' + esc(m.name) + '">+</button></div>' +
+    return '<div class="line"><div><strong>' + esc(nameOf(m, l.size)) + '</strong><br><small>' + sizeLabel(m, l.size) + '</small></div><div class="price">' + naira(m[l.size] * l.qty) + '</div>' +
+      '<div class="qty"><button type="button" data-dec="' + i + '" aria-label="Fewer ' + esc(nameOf(m, l.size)) + '">−</button><span aria-live="polite">' + l.qty + '</span><button type="button" data-inc="' + i + '" aria-label="More ' + esc(nameOf(m, l.size)) + '">+</button></div>' +
       '<div style="text-align:right"><button type="button" data-del="' + i + '" style="background:none;border:0;color:var(--muted);text-decoration:underline;min-height:36px">Remove</button></div></div>';
   }).join("");
   return head("Your cart") + '<div class="pbody">' + lines + '</div><div class="pfoot">' + promoNote() + totalsHtml() + '<button class="btn" type="button" data-go="details">Continue</button></div>';
@@ -789,7 +789,7 @@ function finish(extra) {
   var f = state.form, labels = { card: "Paid by card", transfer: "Bank transfer", cash: f.mode === "delivery" ? "Pay on delivery" : "Pay on pickup" };
   state.order = {
     ref: (extra && extra.ref) || "CG-" + Math.floor(1000 + Math.random() * 9000),
-    items: state.cart.map(function (l) { var m = find(l.id); return { qty: l.qty, name: m.name, size: sizeLabel(m, l.size), sum: m[l.size] * l.qty }; }),
+    items: state.cart.map(function (l) { var m = find(l.id); return { qty: l.qty, name: nameOf(m, l.size), size: sizeLabel(m, l.size), sum: m[l.size] * l.qty }; }),
     total: total(), tops: toppingLines(), mode: f.mode, address: f.address, when: f.when, notes: f.notes, name: f.name.trim(), phone: f.phone.trim(), email: f.email, pay: f.pay, payLabel: labels[f.pay], area: f.area === "mainland" ? "Mainland" : "Island"
   };
   track("order_placed", { total: state.order.total, mode: f.mode, area: state.order.area });
@@ -823,8 +823,8 @@ document.addEventListener("click", function (e) {
   if (t.dataset.add) {
     var id = t.dataset.add, sz = state.size[id] || "r", hit = state.cart.filter(function (l) { return l.id === id && l.size === sz; })[0];
     if (hit) hit.qty++; else state.cart.push({ id: id, size: sz, qty: 1 });
-    track("add_to_order", { item: find(id).name, size: sz });
-    save(); syncBar(); return toast(find(id).name + " added to your cart");
+    track("add_to_order", { item: nameOf(find(id), sz), size: sz });
+    save(); syncBar(); return toast(nameOf(find(id), sz) + " added to your cart");
   }
   if (t.id === "openCart" || t.id === "barOpen") { track("open_cart"); return openPanel("cart"); }
   if (t.hasAttribute("data-shop")) { closePanel(); var mn = document.getElementById("menu"); if (mn) mn.scrollIntoView({ behavior: "smooth" }); return; }
