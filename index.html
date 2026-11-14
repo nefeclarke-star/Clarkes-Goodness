@@ -395,6 +395,13 @@ footer.band { padding: 22px 16px; }
 .art.photo.tub img { object-position: center center; }
 .g5 { margin-top: 34px; }
 @media (min-width: 1000px) {
+  #menuView .gp { grid-column: 1 / -1; order: 0; }
+  #menuView .gp .grp { margin-bottom: 18px; }
+  #menuView .gp .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: start; }
+  #menuView .gp .item { height: 100%; }
+  #menuView > .grp { grid-column: 1 / -1; margin-top: 18px; }
+}
+@media (min-width: 1000px) {
   #menuView .g5 { grid-column: 1 / -1; order: 3; margin-top: 18px; }
   #menuView .g5 .grp { margin-bottom: 18px; }
   #menuView .g5 .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; align-items: start; }
@@ -584,14 +591,16 @@ var CONFIG = {
 
 var SIZE_LABEL = { r: "250 ml", l: "330 ml", xl: "500 ml" };
 var MENU = [
-  { id: "goodness-cup", group: "Parfaits", name: "Goodness in a Cup", names: { r: "Mini Goodness in a Cup", l: "Midi Goodness in a Cup", xl: "Max Goodness in a Cup" }, tag: "Sweetened", desc: "Greek yogurt sweetened with regular sugar, layered with fresh fruit, very crunchy granola made with the finest ingredients, and nuts. Every ingredient is measured, so even if you are on a weight loss journey, you can enjoy some goodness.", r: 4000, l: 5500, xl: 7000, c: ["--berry", "--mango", "--blue"] },
+  { id: "goodness-mini", group: "Parfaits", name: "Mini Goodness in a Cup", tag: "Sweetened", desc: "Greek yogurt sweetened with regular sugar, layered with fresh fruit, very crunchy granola made with the finest ingredients, and nuts. Every ingredient is measured, so even if you are on a weight loss journey, you can enjoy some goodness.", r: 4000, lab: { r: "250 ml" }, c: ["--berry", "--mango", "--blue"] },
+  { id: "goodness-midi", group: "Parfaits", name: "Midi Goodness in a Cup", tag: "Sweetened", desc: "Greek yogurt sweetened with regular sugar, layered with fresh fruit, very crunchy granola made with the finest ingredients, and nuts. Every ingredient is measured, so even if you are on a weight loss journey, you can enjoy some goodness.", r: 5500, lab: { r: "330 ml" }, c: ["--berry", "--mango", "--blue"] },
+  { id: "goodness-max", group: "Parfaits", name: "Max Goodness in a Cup", tag: "Sweetened", desc: "Greek yogurt sweetened with regular sugar, layered with fresh fruit, very crunchy granola made with the finest ingredients, and nuts. Every ingredient is measured, so even if you are on a weight loss journey, you can enjoy some goodness.", r: 7000, lab: { r: "500 ml" }, c: ["--berry", "--mango", "--blue"] },
   { id: "yogurt-sweet", group: "Greek yogurt", name: "Plain Greek Yogurt, Sweetened", tag: "Sweetened", desc: "Thick, creamy plain Greek yogurt, lightly sweetened.", r: 5000, lab: { r: "500 ml" }, c: ["--mango", "--surface", "--berry"] },
   { id: "yogurt-plain", group: "Greek yogurt", name: "Plain Greek Yogurt, Unsweetened", tag: "Unsweetened", desc: "Thick, creamy plain Greek yogurt with no added sugar.", r: 5000, lab: { r: "500 ml" }, c: ["--mango", "--surface", "--leaf"] },
   { id: "yogurt-5l-sweet", group: "Greek yogurt 5 L", name: "Plain Greek Yogurt, Sweetened", tag: "Sweetened", desc: "Thick, creamy plain Greek yogurt, lightly sweetened, in a 5 liter tub. Great for functions, offices, gyms and big families.", r: 20000, lab: { r: "5 liters" }, c: ["--mango", "--surface", "--berry"] },
   { id: "yogurt-5l-plain", group: "Greek yogurt 5 L", name: "Plain Greek Yogurt, Unsweetened", tag: "Unsweetened", desc: "Thick, creamy plain Greek yogurt with no added sugar, in a 5 liter tub. Great for functions, offices, gyms and big families.", r: 20000, lab: { r: "5 liters" }, c: ["--mango", "--surface", "--leaf"] }
 ];
 var GROUP_TITLE = { "Parfaits": "Parfaits", "Greek yogurt": "Greek yogurt, 500 ml", "Greek yogurt 5 L": "Greek yogurt, 5 liters" };
-var PHOTO = { "yogurt-sweet": "yog-sweet", "yogurt-plain": "yog-plain", "yogurt-5l-sweet": "yog5-sweet", "yogurt-5l-plain": "yog5-plain" };
+var PHOTO = { "goodness-mini": "cup-250", "goodness-midi": "cup-330", "goodness-max": "cup-500", "yogurt-sweet": "yog-sweet", "yogurt-plain": "yog-plain", "yogurt-5l-sweet": "yog5-sweet", "yogurt-5l-plain": "yog5-plain" };
 function nameOf(m, k) { return (m.names && m.names[k]) || m.name; }
 function sizeLabel(m, k) { return (m.lab && m.lab[k]) || SIZE_LABEL[k]; }
 
@@ -608,7 +617,8 @@ function naira(n) { return "₦" + Number(n).toLocaleString("en-NG"); }
 function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 function find(id) { return MENU.filter(function (m) { return m.id === id; })[0]; }
 function save() { try { localStorage.setItem("cg-cart", JSON.stringify(state.cart)); } catch (e) {} }
-function load() { try { var v = JSON.parse(localStorage.getItem("cg-cart") || "[]"); if (Array.isArray(v)) state.cart = v.filter(function (l) { return find(l.id) && (l.size === "r" || l.size === "l" || l.size === "xl") && l.qty > 0; }); } catch (e) {} }
+function load() { try { var v = JSON.parse(localStorage.getItem("cg-cart") || "[]"); if (Array.isArray(v)) v.forEach(function (l) { if (l && l.id === "goodness-cup") { l.id = { r: "goodness-mini", l: "goodness-midi", xl: "goodness-max" }[l.size]; l.size = "r"; } });
+    if (Array.isArray(v)) state.cart = v.filter(function (l) { return find(l.id) && (l.size === "r" || l.size === "l" || l.size === "xl") && l.qty > 0; }); } catch (e) {} }
 function toast(msg) { var t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 2200); }
 function subtotal() { return state.cart.reduce(function (s, l) { return s + find(l.id)[l.size] * l.qty; }, 0); }
 function freeDelivery() { return subtotal() >= CONFIG.freeFrom[state.form.area || "island"] && offerOn(); }
@@ -684,17 +694,17 @@ function renderMenu() {
   Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (t) { t.setAttribute("aria-selected", String(t.dataset.cat === state.cat)); });
   if (state.cat === "drinks") { v.innerHTML = '<div class="soon"><h3>Healthy drinks are coming</h3><p>Fresh fruit and vegetable drinks are in the works. Order a parfait while you wait.</p></div>'; return; }
   v.innerHTML = ["Parfaits", "Greek yogurt", "Greek yogurt 5 L"].map(function (g) {
-    return (g === "Greek yogurt 5 L" ? '<section class="g5">' : "") + '<h3 class="grp">' + GROUP_TITLE[g] + '</h3><div class="grid">' + MENU.filter(function (m) { return m.group === g; }).map(function (m) {
+    return (g === "Greek yogurt 5 L" ? '<section class="g5">' : g === "Parfaits" ? '<section class="gp">' : "") + '<h3 class="grp">' + GROUP_TITLE[g] + '</h3><div class="grid">' + MENU.filter(function (m) { return m.group === g; }).map(function (m) {
       var sz = state.size[m.id] || "r";
       var btns = ["r", "l", "xl"].filter(function (k) { return m[k]; }).map(function (k) {
         return '<button type="button" class="size" data-size="' + k + '" data-id="' + m.id + '" aria-pressed="' + (sz === k || !m.l) + '"><span>' + sizeLabel(m, k) + '</span><strong>' + naira(m[k]) + '</strong></button>';
       }).join("");
-      return '<article class="item' + (m.group !== "Parfaits" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " wide" : " tub") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "r" ? "250" : sz === "l" ? "330" : "500") : PHOTO[m.id]) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
+      return '<article class="item' + (m.group !== "Parfaits" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " wide" : " tub") + '">' + '<img src="' + PHOTO[m.id] + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
         '<div class="body"><span class="pill">' + esc(m.tag) + '</span><h3>' + esc(nameOf(m, sz)) + '</h3><p>' + esc(m.desc) + '</p>' +
         '<p class="shelf"><b>No preservatives.</b> Best consumed within 5 days. Keep chilled.</p>' +
         '<div class="sizes" role="group" aria-label="Size for ' + esc(nameOf(m, sz)) + '">' + btns + '</div>' +
         '<button type="button" class="btn" data-add="' + m.id + '">Add to cart</button></div></article>';
-    }).join("") + '</div>' + (g === "Greek yogurt 5 L" ? "</section>" : "");
+    }).join("") + '</div>' + (g === "Greek yogurt 5 L" || g === "Parfaits" ? "</section>" : "");
   }).join("");
 }
 
