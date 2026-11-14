@@ -118,11 +118,6 @@ section { padding-block: 56px; }
 .art.photo { position: relative; } .art.photo.sq { aspect-ratio: 1 / 1; } .art.photo.wide { aspect-ratio: 5 / 4; }
 .art.photo img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; }
 .art svg { width: 100%; height: 100%; }
-.playbtn { position: absolute; right: 10px; bottom: 10px; z-index: 2; border: 0; border-radius: 999px; padding: 8px 16px; min-height: 44px; font: inherit; font-weight: 800; font-size: .92rem; background: rgba(255,255,255,.95); color: #14231A; cursor: pointer; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
-.viddlg { border: 0; padding: 0; background: #000; border-radius: 18px; width: min(92vw, 400px); max-height: 92vh; overflow: hidden; }
-.viddlg::backdrop { background: rgba(0,0,0,.72); }
-.viddlg video { display: block; width: 100%; max-height: 86vh; object-fit: contain; background: #000; }
-.vidclose { position: absolute; top: 10px; right: 10px; z-index: 3; border: 0; border-radius: 999px; padding: 8px 16px; min-height: 44px; font: inherit; font-weight: 800; background: rgba(255,255,255,.95); color: #14231A; cursor: pointer; }
 .swatch { height: 120px; background: linear-gradient(180deg, var(--c1) 0 34%, var(--surface) 34% 40%, var(--c2) 40% 72%, var(--surface) 72% 78%, var(--c3) 78% 100%); }
 .item .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .item h3 { font-size: 24px; }
@@ -694,7 +689,7 @@ function renderMenu() {
       var btns = ["r", "l", "xl"].filter(function (k) { return m[k]; }).map(function (k) {
         return '<button type="button" class="size" data-size="' + k + '" data-id="' + m.id + '" aria-pressed="' + (sz === k || !m.l) + '"><span>' + sizeLabel(m, k) + '</span><strong>' + naira(m[k]) + '</strong></button>';
       }).join("");
-      return '<article class="item' + (m.group !== "Parfaits" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " wide" : " tub") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "r" ? "250" : sz === "l" ? "330" : "500") : PHOTO[m.id]) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + (m.group === "Parfaits" && sz === "xl" ? '<button type="button" class="playbtn" data-video="cup-500.mp4" data-poster="cup-500-poster.jpg">&#9654; Watch the 500 ml</button>' : '') + '</div>' +
+      return '<article class="item' + (m.group !== "Parfaits" ? " yog" : "") + '"><div class="art photo' + (m.group === "Parfaits" ? " wide" : " tub") + '">' + '<img src="' + (m.group === "Parfaits" ? "cup-" + (sz === "r" ? "250" : sz === "l" ? "330" : "500") : PHOTO[m.id]) + '.jpg" alt="' + esc(m.name) + ', ' + sizeLabel(m, sz) + '" loading="lazy">' + '</div>' +
         '<div class="body"><span class="pill">' + esc(m.tag) + '</span><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p>' +
         '<p class="shelf"><b>No preservatives.</b> Best consumed within 5 days. Keep chilled.</p>' +
         '<div class="sizes" role="group" aria-label="Size for ' + esc(m.name) + '">' + btns + '</div>' +
@@ -825,8 +820,6 @@ document.addEventListener("click", function (e) {
   var t = e.target.closest("button, a, .tab"); if (!t) return;
   if (t.classList.contains("tab")) { state.cat = t.dataset.cat; return renderMenu(); }
   if (t.dataset.size) { state.size[t.dataset.id] = t.dataset.size; return renderMenu(); }
-  if (t.dataset.video) { track("watch_video", { video: t.dataset.video }); return openVideo(t.dataset.video, t.dataset.poster); }
-  if (t.hasAttribute("data-vidclose")) return $("#vidDlg").close();
   if (t.dataset.add) {
     var id = t.dataset.add, sz = state.size[id] || "r", hit = state.cart.filter(function (l) { return l.id === id && l.size === sz; })[0];
     if (hit) hit.qty++; else state.cart.push({ id: id, size: sz, qty: 1 });
@@ -853,16 +846,6 @@ document.addEventListener("change", function (e) {
 });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("#layer").hidden) closePanel(); });
 $("#scrim").addEventListener("click", closePanel);
-function openVideo(src, poster) {
-  var d = $("#vidDlg"), v = d.querySelector("video");
-  v.poster = poster || ""; v.src = src; d.showModal();
-  var p = v.play(); if (p && p.catch) p.catch(function () {});
-}
-(function () {
-  var d = $("#vidDlg"); if (!d) return;
-  d.addEventListener("close", function () { var v = d.querySelector("video"); v.pause(); v.removeAttribute("src"); v.load(); });
-  d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
-})();
 
 /* ----- start ----- */
 load();
@@ -1009,6 +992,5 @@ renderMenu();
   scrolled();
 })();
 </script>
-<dialog id="vidDlg" class="viddlg" aria-label="Video of the 500 ml parfait"><button type="button" class="vidclose" data-vidclose>Close</button><video controls loop playsinline preload="none"></video></dialog>
 </body>
 </html>
