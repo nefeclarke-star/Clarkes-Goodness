@@ -921,7 +921,13 @@ $("#joinForm").addEventListener("submit", function (e) {
 })();
 $("#bulkWa").addEventListener("click", function () { track("catering_enquiry"); });
 $("#bulkWa").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent("Hello Clarke's Goodness, I would like a quote for a function, supermarket supply or collaboration.");
-$("#vAddress").textContent = CONFIG.address; $("#vHours").textContent = CONFIG.hours; $("#vContact").textContent = CONFIG.contact;
+$("#vAddress").textContent = CONFIG.address; $("#vHours").textContent = CONFIG.hours; (function () {
+  var vc = $("#vContact"); vc.textContent = "WhatsApp ";
+  [["0813 929 6581", CONFIG.whatsapp], ["0902 675 1331", CONFIG.whatsapp2]].forEach(function (x, i) {
+    if (i) vc.appendChild(document.createTextNode(" or "));
+    var a = document.createElement("a"); a.href = "https://wa.me/" + x[1]; a.target = "_blank"; a.rel = "noopener"; a.textContent = x[0]; vc.appendChild(a);
+  });
+})();
 if (CONFIG.email) { var vc = $("#vContact"), ea = document.createElement("a"); ea.href = "mailto:" + CONFIG.email; ea.textContent = CONFIG.email; vc.appendChild(document.createElement("br")); vc.appendChild(document.createTextNode("Complaints and enquiries: ")); vc.appendChild(ea); }
 $("#yr").textContent = new Date().getFullYear();
 syncBar();
