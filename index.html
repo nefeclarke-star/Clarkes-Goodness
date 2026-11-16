@@ -499,7 +499,7 @@ footer.band { padding: 22px 16px; }
     
     <p class="photonote">Photos are for illustration. The fruits we use are listed under &ldquo;What is in our cups&rdquo;.</p>
     <div id="menuView"></div>
-    <div class="grid"><article class="item"><div class="art photo tub"><img src="granola.jpg" alt="Freshly made crunchy granola with almonds, cashews and dried cranberries" loading="lazy"></div><div class="body"><span class="pill">Included in every parfait</span><h3>Fresh, crunchy granola</h3><p>Our parfaits are made with freshly made, very crunchy granola, prepared with the finest ingredients. It comes with every parfait and is not sold separately.</p></div></article></div>
+    <div class="grid"><article class="item"><div class="art photo tub"><img src="granola.jpg" alt="Freshly made crunchy granola with almonds, cashews and dried cranberries" loading="lazy"></div><div class="body"><span class="pill">Included in every parfait</span><h3>Fresh, crunchy granola</h3><p>A pack of freshly made, very crunchy granola comes with every cup of parfait. Want more? An extra pack of granola is &#8358;1,500, and each extra topping is &#8358;1,000.</p></div></article></div>
     <div class="soonwrap">
       <h3>More goodness coming soon</h3><p class="dnote">Fresh smoothies and juices, made the same way as our parfaits.</p>
       <div class="dgrid"><div class="dcard"><img src="drink-strawberry-banana.jpg" alt="Clarke's Goodness Strawberry Banana Smoothie" loading="lazy"><div><b>Clarke&rsquo;s Goodness Strawberry Banana Smoothie</b><em>Coming soon</em></div></div><div class="dcard"><img src="drink-banana-avocado-pineapple.jpg" alt="Clarke's Goodness Banana, Avocado and Pineapple Smoothie" loading="lazy"><div><b>Clarke&rsquo;s Goodness Banana, Avocado and Pineapple Smoothie</b><em>Coming soon</em></div></div><div class="dcard"><img src="drink-green-goodness.jpg" alt="Clarke's Goodness Green Smoothie" loading="lazy"><div><b>Clarke&rsquo;s Goodness Green Smoothie</b><em>Coming soon</em></div></div><div class="dcard"><img src="drink-watermelon-juice.jpg" alt="Clarke's Goodness Watermelon Juice" loading="lazy"><div><b>Clarke&rsquo;s Goodness Watermelon Juice</b><em>Coming soon</em></div></div><div class="dcard"><img src="drink-pineapple-juice.jpg" alt="Clarke's Goodness Pineapple Juice" loading="lazy"><div><b>Clarke&rsquo;s Goodness Pineapple Juice</b><em>Coming soon</em></div></div></div>
@@ -584,7 +584,7 @@ var CONFIG = {
   hours: "Pre-order only. Please order at least 24 hours ahead and choose your pickup day at checkout.",
   contact: "WhatsApp 0813 929 6581",
   email: "clarkesparfait@gmail.com",  // complaints and enquiries email
-  cupsSold: 420,                      // update this number as your sales grow
+  cupsSold: 501,                      // update this number as your sales grow
   windows: ["Morning", "Afternoon", "Evening"],
   bank: { name: "Moniepoint", account: "53208992122", holder: "" }
 };
@@ -605,11 +605,11 @@ function nameOf(m, k) { return (m.names && m.names[k]) || m.name; }
 function sizeLabel(m, k) { return (m.lab && m.lab[k]) || SIZE_LABEL[k]; }
 
 var $ = function (s, r) { return (r || document).querySelector(s); };
-var TOPPINGS = { price: 500, items: [
+var TOPPINGS = { price: 1000, items: [
   { id: "dried-fruits", name: "Dried fruits", amt: "2 tablespoons" },
   { id: "coconut", name: "Coconut shavings", amt: "2 tablespoons" },
   { id: "cashew", name: "Cashew nuts", amt: "10 pieces" },
-  { id: "granola", name: "Crunchy granola", amt: "2 tablespoons" }
+  { id: "granola", name: "Extra pack of granola", amt: "1 pack", price: 1500 }
 ] };
 var state = { cat: "parfaits", size: {}, shot: {}, cart: [], view: "cart", form: { name: "", phone: "", email: "", mode: "pickup", area: "island", address: "", when: "", notes: "", pay: "transfer", tops: {} }, errors: {}, order: null };
 
@@ -636,7 +636,7 @@ function toppingLines() {
   var t = state.form.tops || {};
   return TOPPINGS.items.filter(function (i) { return +t[i.id] > 0; }).map(function (i) {
     var q = +t[i.id];
-    return { name: i.name, label: q + " x " + i.amt, sum: q * TOPPINGS.price };
+    return { name: i.name, label: q + " x " + i.amt, sum: q * (i.price || TOPPINGS.price) };
   });
 }
 function toppingsCost() { return state.cart.length ? toppingLines().reduce(function (a, l) { return a + l.sum; }, 0) : 0; }
@@ -751,9 +751,9 @@ function viewDetails() {
     fld("phone", "Phone number", "tel", 'autocomplete="tel" inputmode="tel" placeholder="0801 234 5678"') +
     (f.mode === "delivery" ? '<label class="f" for="area">Delivery area<select class="in" id="area" name="area">' + areaOpts() + '</select></label><label class="f" for="address">Delivery address<textarea class="in' + (state.errors.address ? " bad" : "") + '" id="address" rows="3" autocomplete="street-address">' + esc(f.address) + '</textarea><span class="err">' + esc(state.errors.address || "") + '</span></label>' : "") +
     '<div class="seg"><label class="f" for="pday">Pickup day<select class="in" id="pday">' + dayOpts() + '</select></label><label class="f" for="pwin">Time of day<select class="in" id="pwin">' + winOpts() + '</select></label></div>' +
-    '<fieldset class="tops"><legend>Special requests: extra toppings</legend><p class="tnote">Each extra topping is ' + naira(TOPPINGS.price) + ' per portion, and is added to your total at checkout. Toppings cannot be ordered on their own, only with a parfait or Greek yogurt.</p>' + TOPPINGS.items.map(function (i) {
+    '<fieldset class="tops"><legend>Special requests: extra toppings</legend><p class="tnote">A pack of granola comes with every cup of parfait. An extra pack of granola is ' + naira(1500) + ', and each extra topping is ' + naira(TOPPINGS.price) + '. Extras are added to your total at checkout. Toppings cannot be ordered on their own, only with a parfait or Greek yogurt.</p>' + TOPPINGS.items.map(function (i) {
       var v = +((f.tops || {})[i.id] || 0);
-      return '<label class="toprow"><span>' + i.name + ' <small>(' + i.amt + ' per portion)</small></span><select class="in" data-top="' + i.id + '" aria-label="' + i.name + '">' + [0, 1, 2, 3].map(function (n) { return '<option value="' + n + '"' + (v === n ? " selected" : "") + '>' + (n === 0 ? "None" : n + (n === 1 ? " portion" : " portions") + " (" + naira(n * TOPPINGS.price) + ")") + '</option>'; }).join("") + '</select></label>';
+      return '<label class="toprow"><span>' + i.name + ' <small>(' + i.amt + ' per portion, ' + naira(i.price || TOPPINGS.price) + ' each)</small></span><select class="in" data-top="' + i.id + '" aria-label="' + i.name + '">' + [0, 1, 2, 3].map(function (n) { return '<option value="' + n + '"' + (v === n ? " selected" : "") + '>' + (n === 0 ? "None" : n + (n === 1 ? " portion" : " portions") + " (" + naira(n * (i.price || TOPPINGS.price)) + ")") + '</option>'; }).join("") + '</select></label>';
     }).join("") + '</fieldset>' +
     '<label class="f" for="notes">Notes (optional)<textarea class="in" id="notes" rows="2" placeholder="Gate code, delivery notes. For custom or allergy requests (20 cups or more), tell us exactly what to leave out.">' + esc(f.notes) + '</textarea></label>' +
     '</div><div class="pfoot">' + promoNote() + totalsHtml() + '<div class="seg"><button class="btn ghost" type="button" data-go="cart">Back</button><button class="btn" type="button" data-go="pay">Continue to pay</button></div></div>';
