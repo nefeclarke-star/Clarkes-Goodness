@@ -323,6 +323,8 @@ footer.band { padding: 22px 16px; }
 .reelwrap { perspective: 1100px; }
 .reelframe { transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .18s ease-out; will-change: transform; box-shadow: 0 28px 60px -18px rgba(60,12,24,.45), 0 8px 18px -8px rgba(60,12,24,.25); }
 .reelframe .reelv { position: absolute; inset: -6%; width: 112%; height: 112%; max-width: none; transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(1.03); transition: transform .18s ease-out; will-change: transform; }
+.sp-card .sp-photo { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: center; display: block; transform-origin: center 60%; }
+.spatial > * { min-width: 0; max-width: 100%; }
 @media (prefers-reduced-motion: reduce) { .reelframe { transition: none; transform: none; } .reelframe .reelv { inset: 0; width: 100%; height: 100%; transform: none; transition: none; } .reelframe .sp-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: center 60%; }
 @media (prefers-reduced-motion: no-preference) { .sp-photo { animation: zoomfloat 8s ease-in-out infinite; } }
 .sp-glare { display: none; } }
@@ -410,7 +412,7 @@ footer.band { padding: 22px 16px; }
 }
 
 /* spatial showcase: 3D tilt + depth parallax */
-.spatial { display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; justify-items: center; padding-block: 28px; }
+.spatial { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: center; justify-items: center; padding-block: 28px; }
 .sp-stage { perspective: 1100px; width: min(100%, 400px); }
 .sp-card { position: relative; aspect-ratio: 3 / 4; border-radius: 28px; overflow: hidden; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .18s ease-out; box-shadow: 0 28px 60px -18px rgba(60,12,24,.45), 0 8px 18px -8px rgba(60,12,24,.25); background: #EFE3D3; will-change: transform; }
 .sp-img { position: absolute; inset: -3%; width: 106%; height: 106%; max-width: none; object-fit: cover; transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(1); transition: transform .18s ease-out; will-change: transform; }
@@ -488,7 +490,7 @@ footer.band { padding: 22px 16px; }
 
   <section id="spatial" aria-labelledby="spatialh">
     <div class="sec-head"><h2 id="spatialh">Fresh, creamy, crunchy</h2></div>
-    <div class="spatial"><div class="sp-stage"><div class="sp-card"><img class="sp-photo" src="cup-uncovered.jpg" alt="A Clarke's Goodness parfait cup with the lid lifted off, next to a pack of crunchy granola" loading="lazy" width="900" height="1200"></div></div>
+    <div class="spatial"><div class="sp-stage"><div class="sp-card"><img class="sp-photo" src="spatial-parfait.jpg?v=5" alt="A Clarke's Goodness parfait cup with its lid tilted open, showing layers of Greek yogurt, fruit and crunchy granola, with a pack of granola beside it" loading="lazy" width="1284" height="1713"></div></div>
     <div class="spatial-text"><h3>Every layer, made to order.</h3><p>Creamy Greek yogurt, juicy fruit, cashew nuts and very crunchy granola, layered fresh for you.</p><a class="btn" href="#menu">See the menu</a></div></div>
   </section>
 
