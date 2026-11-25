@@ -217,7 +217,7 @@ body { margin: 0; padding-bottom: 96px; }
 .soon-card span { color: var(--muted); font-size: 14px; }
 .soon-card em { font-style: normal; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--leaf); }
 @media (prefers-reduced-motion: no-preference) {
-  .hv { animation: drift 16s ease-in-out infinite alternate; }
+  .hv { animation: none; }
   @keyframes drift { from { transform: scale(1.02); } to { transform: scale(1.14); } }
   .stage .tag { animation: floaty 5s ease-in-out infinite; }
   .stage .tag.t2 { animation-delay: -1.7s; } .stage .tag.t3 { animation-delay: -3.2s; }
@@ -446,7 +446,7 @@ footer.band { padding: 22px 16px; }
     </div>
     <div class="stage">
       <div class="cup" aria-hidden="true"></div>
-      <div class="vframe"><video id="heroVid" class="hv" autoplay muted loop playsinline preload="metadata" poster="hero-poster.jpg" aria-label="Welcome to Clarke's Goodness, fresh parfaits"><source src="hero-welcome-v3.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="heroSound" aria-pressed="false">Tap for sound</button></div>
+      <div class="vframe"><video id="heroVid" class="hv" autoplay muted loop playsinline preload="metadata" poster="hero-poster.jpg?v=2" aria-label="Welcome to Clarke's Goodness, fresh parfaits"><source src="hero-welcome-v4.mp4" type="video/mp4"></video><button type="button" class="reelbtn" id="heroSound" aria-pressed="false">Tap for sound</button></div>
       <div class="welcome" aria-hidden="true"><span>Welcome to</span><b>Clarke's Goodness</b></div><span class="tag t1">Chilled</span><span class="tag t2">Fresh fruit</span><span class="tag t3">Made to order</span>
     </div>
   </div>
